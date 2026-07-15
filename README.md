@@ -6,8 +6,14 @@ migrations and Testcontainers. This replaces an earlier console prototype; the
 value here is the layered architecture, the enforced domain constraints, and the
 role-based access control proven by tests.
 
+- **Live dashboard (web UI):** https://hospital-management-harshh30.vercel.app — role-aware React app; log in as `alice` / `Password123!` (or `admin` / `dr.smith`).
 - **Live Swagger UI:** https://hospital-app-production-1b19.up.railway.app/swagger-ui.html
   (demo login `alice` / `Password123!` — see [Demo credentials](#demo-credentials))
+
+> **Frontend:** a `frontend/` React + Vite + TypeScript + Tailwind dashboard (login,
+> book/cancel appointments, view records; admin manages patients/doctors) calls the
+> API and deploys to Vercel. `docker compose up` runs the API + MySQL; run the
+> frontend with `cd frontend && npm install && npm run dev`.
 - **Stack:** Java 21 · Spring Boot 3.3 · Spring Data JPA · Spring Security (JWT) · MySQL 8 · Flyway · MapStruct · Testcontainers · Maven
 
 > **Résumé accuracy note.** Data access is **Spring Data JPA** (not raw JDBC — the
