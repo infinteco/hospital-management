@@ -9,6 +9,7 @@ import {
 } from "../api";
 import type { Appointment, Doctor, Me, Patient } from "../types";
 import {
+  Avatar,
   btnGhost,
   btnPrimary,
   Card,
@@ -93,22 +94,29 @@ export function AppointmentsPanel({ me }: { me: Me }) {
         <div className="grid gap-3">
           {appointments.map((a) => (
             <Card key={a.id} className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{formatDateTime(a.startTime)}</span>
-                  <StatusBadge status={a.status} />
+              <div className="flex items-center gap-3">
+                <Avatar name={me.role === "PATIENT" ? a.doctorName : a.patientName} />
+                <div>
+                  <p className="font-semibold text-slate-800">
+                    {me.role === "PATIENT" ? a.doctorName : a.patientName}
+                    {me.role === "ADMIN" && (
+                      <span className="font-normal text-slate-500"> · {a.doctorName}</span>
+                    )}
+                  </p>
+                  <p className="mt-0.5 text-sm text-slate-500">
+                    {formatDateTime(a.startTime)}
+                    {a.reason && ` · ${a.reason}`}
+                  </p>
                 </div>
-                <p className="mt-1 text-sm text-slate-600">
-                  {me.role === "PATIENT" ? a.doctorName : a.patientName}
-                  {me.role === "ADMIN" && ` · ${a.doctorName}`}
-                  {a.reason && ` · ${a.reason}`}
-                </p>
               </div>
-              {a.status === "SCHEDULED" && (
-                <button className={btnGhost} onClick={() => onCancel(a.id)}>
-                  Cancel
-                </button>
-              )}
+              <div className="flex items-center gap-3">
+                <StatusBadge status={a.status} />
+                {a.status === "SCHEDULED" && (
+                  <button className={btnGhost} onClick={() => onCancel(a.id)}>
+                    Cancel
+                  </button>
+                )}
+              </div>
             </Card>
           ))}
         </div>

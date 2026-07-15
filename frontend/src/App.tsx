@@ -7,7 +7,7 @@ import { MedicalRecordsPanel } from "./components/MedicalRecordsPanel";
 import { NewRecordPanel } from "./components/NewRecordPanel";
 import { PatientsPanel } from "./components/PatientsPanel";
 import type { Me, Role } from "./types";
-import { btnGhost, cn, Spinner } from "./ui";
+import { Avatar, cn, Spinner } from "./ui";
 
 const TABS: Record<Role, string[]> = {
   PATIENT: ["Appointments", "My Records", "Doctors"],
@@ -18,7 +18,7 @@ const TABS: Record<Role, string[]> = {
 const ROLE_BADGE: Record<Role, string> = {
   ADMIN: "bg-purple-100 text-purple-700",
   DOCTOR: "bg-sky-100 text-sky-700",
-  PATIENT: "bg-emerald-100 text-emerald-700",
+  PATIENT: "bg-teal-100 text-teal-700",
 };
 
 export default function App() {
@@ -54,7 +54,7 @@ export default function App() {
   if (booting) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <Spinner label="Loading…" />
+        <Spinner />
       </div>
     );
   }
@@ -63,18 +63,26 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-slate-200 bg-white">
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <span className="text-xl">🏥</span>
-            <span className="font-semibold">Hospital Management</span>
+            <span className="text-lg font-bold text-slate-900">
+              Medi<span className="text-teal-600">Desk</span>
+            </span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-slate-600">{user.username}</span>
-            <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", ROLE_BADGE[user.role])}>
-              {user.role.toLowerCase()}
-            </span>
-            <button className={btnGhost} onClick={logout}>
+            <div className="hidden text-right sm:block">
+              <div className="text-sm font-medium text-slate-800">{user.username}</div>
+              <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", ROLE_BADGE[user.role])}>
+                {user.role.toLowerCase()}
+              </span>
+            </div>
+            <Avatar name={user.username} className="h-9 w-9" />
+            <button
+              onClick={logout}
+              className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+            >
               Sign out
             </button>
           </div>
@@ -82,16 +90,16 @@ export default function App() {
       </header>
 
       <div className="mx-auto max-w-5xl px-4 py-6">
-        <nav className="mb-6 flex gap-1 border-b border-slate-200">
+        <nav className="mb-6 flex gap-2 overflow-x-auto">
           {TABS[user.role].map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
               className={cn(
-                "border-b-2 px-4 py-2 text-sm font-medium transition",
+                "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
                 tab === t
-                  ? "border-indigo-600 text-indigo-600"
-                  : "border-transparent text-slate-500 hover:text-slate-800",
+                  ? "bg-teal-600 text-white shadow-sm"
+                  : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50",
               )}
             >
               {t}
@@ -99,16 +107,18 @@ export default function App() {
           ))}
         </nav>
 
-        {tab === "Appointments" && <AppointmentsPanel me={user} />}
-        {tab === "My Records" &&
-          (user.patientId ? (
-            <MedicalRecordsPanel patientId={user.patientId} />
-          ) : (
-            <p className="text-slate-500">No patient profile linked to this account.</p>
-          ))}
-        {tab === "New Record" && <NewRecordPanel />}
-        {tab === "Patients" && <PatientsPanel />}
-        {tab === "Doctors" && <DoctorsPanel me={user} />}
+        <div className="animate-fade-up" key={tab}>
+          {tab === "Appointments" && <AppointmentsPanel me={user} />}
+          {tab === "My Records" &&
+            (user.patientId ? (
+              <MedicalRecordsPanel patientId={user.patientId} />
+            ) : (
+              <p className="text-slate-500">No patient profile linked to this account.</p>
+            ))}
+          {tab === "New Record" && <NewRecordPanel />}
+          {tab === "Patients" && <PatientsPanel />}
+          {tab === "Doctors" && <DoctorsPanel me={user} />}
+        </div>
       </div>
     </div>
   );

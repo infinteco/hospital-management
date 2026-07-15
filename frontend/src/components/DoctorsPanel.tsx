@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ApiError, createDoctor, listDoctors } from "../api";
 import type { Doctor, Me } from "../types";
-import { btnGhost, btnPrimary, Card, Field, inputClass, Spinner } from "../ui";
+import { Avatar, btnGhost, btnPrimary, Card, Field, inputClass, Spinner } from "../ui";
 
 export function DoctorsPanel({ me }: { me: Me }) {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -51,10 +51,13 @@ export function DoctorsPanel({ me }: { me: Me }) {
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
           {doctors.map((d) => (
-            <Card key={d.id}>
-              <p className="font-medium">{d.fullName}</p>
-              <p className="text-sm text-indigo-600">{d.specialization}</p>
-              {d.email && <p className="mt-1 text-sm text-slate-500">{d.email}</p>}
+            <Card key={d.id} className="flex items-center gap-4">
+              <Avatar name={d.fullName} className="h-12 w-12 text-base" />
+              <div className="min-w-0">
+                <p className="truncate font-semibold text-slate-800">{d.fullName}</p>
+                <p className="text-sm font-medium text-teal-600">{d.specialization}</p>
+                {d.email && <p className="mt-0.5 truncate text-sm text-slate-400">{d.email}</p>}
+              </div>
             </Card>
           ))}
         </div>
