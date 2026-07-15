@@ -15,7 +15,8 @@ spring:
     baseline-on-migrate: true
 
 server:
-  port: ${SERVER_PORT:8080}
+  # Honour the platform-injected PORT (Railway/Render/Heroku), then SERVER_PORT, else 8080.
+  port: ${PORT:${SERVER_PORT:8080}}
   error:
     include-message: always
 
