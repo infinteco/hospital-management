@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: hospital-management
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/hospital?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:hospital}
+    password: ${DB_PASSWORD:hospital}
+  jpa:
+    hibernate:
+      # Flyway owns the schema; Hibernate only validates it matches the entities.
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: always
+
+app:
+  jwt:
+    # Override in production via APP_JWT_SECRET. Must be >= 32 bytes for HS256.
+    secret: ${APP_JWT_SECRET:change-me-in-prod-please-use-a-long-random-secret-key}
+    # Access-token lifetime in milliseconds (default 1 hour).
+    expiration-ms: ${APP_JWT_EXPIRATION_MS:3600000}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
+
+logging:
+  level:
+    org.springframework.security: INFO
