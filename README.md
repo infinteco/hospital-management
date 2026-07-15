@@ -6,7 +6,8 @@ migrations and Testcontainers. This replaces an earlier console prototype; the
 value here is the layered architecture, the enforced domain constraints, and the
 role-based access control proven by tests.
 
-- **Live Swagger UI:** _add your Railway/Render URL_ + `/swagger-ui.html`
+- **Live Swagger UI:** https://hospital-app-production-1b19.up.railway.app/swagger-ui.html
+  (demo login `alice` / `Password123!` — see [Demo credentials](#demo-credentials))
 - **Stack:** Java 21 · Spring Boot 3.3 · Spring Data JPA · Spring Security (JWT) · MySQL 8 · Flyway · MapStruct · Testcontainers · Maven
 
 > **Résumé accuracy note.** Data access is **Spring Data JPA** (not raw JDBC — the
